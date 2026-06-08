@@ -3,20 +3,19 @@ import express from "express";
 import cors from "cors";
 import path from "node:path";
 import fs from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { agentRegistry } from "../shared/agents";
 import { runStockImagePipeline } from "./orchestrator";
 import { marketplaceOptions } from "./lib/marketplaces";
 import { buildMoodboardPlan, createMoodboardProxyImage } from "./lib/moodboard";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, "..");
+const rootDir = process.cwd();
 const outputRoot = path.join(rootDir, "outputs");
 const port = Number(process.env.PORT ?? process.env.NODE_PORT ?? 3000);
 
-await fs.mkdir(outputRoot, { recursive: true });
+void fs.mkdir(outputRoot, { recursive: true }).catch((error) => {
+  console.error(`Failed to prepare output directory: ${error instanceof Error ? error.message : "unknown error"}`);
+});
 
 const app = express();
 app.use(cors());

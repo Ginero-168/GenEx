@@ -1,1 +1,1 @@
-import "./build/server.js";
+require("./build/server.cjs");
