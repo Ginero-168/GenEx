@@ -1,7 +1,7 @@
 import { Buffer } from "node:buffer";
 import net from "node:net";
-import sharp from "sharp";
 import { nanoid } from "nanoid";
+import type sharp from "sharp";
 import type {
   MoodboardAsset,
   MoodboardComponent,
@@ -19,6 +19,15 @@ const maxAssetsPerComponent = 2;
 const maxProxyBytes = 12 * 1024 * 1024;
 const validRoles: MoodboardRole[] = ["human", "place", "prop", "decor", "food", "lighting", "composition", "texture"];
 const proxyCache = new Map<string, { buffer: Buffer; contentType: string; cachedAt: number }>();
+
+type Sharp = typeof sharp;
+
+let sharpInstance: Sharp | undefined;
+
+async function loadSharp(): Promise<Sharp> {
+  sharpInstance ??= (await import("sharp")).default;
+  return sharpInstance;
+}
 
 interface OpenverseImage {
   id: string;
@@ -123,6 +132,7 @@ export async function buildMoodboardPlan(input: MoodboardRequest, config?: Moodb
 }
 
 export async function createMoodboardProxyImage(rawUrl: string): Promise<{ buffer: Buffer; contentType: string }> {
+  const sharp = await loadSharp();
   const parsed = parseSafeRemoteUrl(rawUrl);
   const cacheKey = parsed.toString();
   const cached = proxyCache.get(cacheKey);

@@ -1,5 +1,14 @@
-import sharp from "sharp";
 import type { AspectRatio, RenderQuality } from "../../shared/types";
+import type sharp from "sharp";
+
+type Sharp = typeof sharp;
+
+let sharpInstance: Sharp | undefined;
+
+async function loadSharp(): Promise<Sharp> {
+  sharpInstance ??= (await import("sharp")).default;
+  return sharpInstance;
+}
 
 export interface TargetProfile {
   apiSize: "1024x1024" | "1536x1024" | "1024x1536";
@@ -43,6 +52,7 @@ export function targetProfileFor(aspectRatio: AspectRatio, minMegapixels = 4): T
 }
 
 export async function createDemoImage(_prompt: string, aspectRatio: AspectRatio, quality: RenderQuality, minMegapixels = 4): Promise<Buffer> {
+  const sharp = await loadSharp();
   const target = targetProfileFor(aspectRatio, minMegapixels);
   const accent = quality === "high" ? "#2f8f83" : quality === "medium" ? "#6f7f3f" : "#7c6f64";
   const secondary = quality === "high" ? "#d9a441" : quality === "medium" ? "#8eb6bd" : "#c6a18a";
@@ -92,6 +102,7 @@ export async function prepareDeliverable(
   outputFormat: "jpeg" | "png",
   minMegapixels: number
 ): Promise<PreparedImage> {
+  const sharp = await loadSharp();
   const target = targetProfileFor(aspectRatio, minMegapixels);
   const original = await sharp(sourceBuffer).metadata();
   const needsResize = (original.width ?? 0) < target.width || (original.height ?? 0) < target.height;
