@@ -7,8 +7,11 @@
     "dev": "concurrently -k -n api,web -c cyan,green \"npm:dev:server\" \"npm:dev:client\"",
     "dev:client": "vite --host 127.0.0.1",
     "dev:server": "tsx watch server/index.ts",
-    "start": "tsx server/index.ts",
-    "build": "tsc --noEmit && vite build",
+    "start": "node server.js",
+    "typecheck": "tsc --noEmit",
+    "build:web": "vite build",
+    "build:server": "esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=build/server.js",
+    "build": "npm run typecheck && npm run build:web && npm run build:server",
     "iterate": "node scripts/iterate-plan.mjs"
   },
   "dependencies": {
@@ -22,7 +25,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sharp": "^0.33.5",
-    "tsx": "^4.19.2",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -33,6 +35,8 @@
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.0",
+    "esbuild": "^0.28.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.5"
   }
