@@ -172,6 +172,6 @@ app.get("*", async (_request, response, next) => {
   }
 });
 
-app.listen(port, "127.0.0.1", () => {
+app.listen(port, () => {
   console.log(`Stock Image Agent Lab API running at http://127.0.0.1:${port}`);
 });
