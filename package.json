@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently -k -n api,web -c cyan,green \"npm:dev:server\" \"npm:dev:client\"",
     "dev:client": "vite --host 127.0.0.1",
-    "dev:server": "tsx watch server/index.ts",
+    "dev:server": "PORT=8787 tsx watch server/index.ts",
     "start": "node server.js",
     "typecheck": "tsc --noEmit",
     "compile:web": "vite build",

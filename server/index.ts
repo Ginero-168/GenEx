@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
 const outputRoot = path.join(rootDir, "outputs");
-const port = Number(process.env.PORT ?? 8787);
+const port = Number(process.env.PORT ?? process.env.NODE_PORT ?? 3000);
 
 await fs.mkdir(outputRoot, { recursive: true });
 
@@ -172,6 +172,6 @@ app.get("*", async (_request, response, next) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Stock Image Agent Lab API running at http://127.0.0.1:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Stock Image Agent Lab API running at http://0.0.0.0:${port}`);
 });
