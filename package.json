@@ -9,9 +9,9 @@
     "dev:server": "tsx watch server/index.ts",
     "start": "node server.js",
     "typecheck": "tsc --noEmit",
-    "build:web": "vite build",
-    "build:server": "esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=build/server.js",
-    "build": "npm run typecheck && npm run build:web && npm run build:server",
+    "compile:web": "vite build",
+    "compile:server": "esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=build/server.js",
+    "build": "npm run typecheck && npm run compile:web && npm run compile:server",
     "iterate": "node scripts/iterate-plan.mjs"
   },
   "dependencies": {
