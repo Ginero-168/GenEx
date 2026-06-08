@@ -1,0 +1,7 @@
+node_modules/
+dist/
+outputs/
+.env
+.mcp.json
+.DS_Store
+npm-debug.log*
